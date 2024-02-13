@@ -210,12 +210,12 @@ int main() {
             string idClient = "12345";
             cout << "Enter your Client ID: ";
             cin >> idClient;
-            user = new Client(name, "000-000-0000", 30, password, idClient);
+            user = new Client(name, "123456789", 22, password, idClient);
         } else if (userType == "seller") {
             string idSeller = "54321";
             cout << "Enter your Seller ID: ";
             cin >> idSeller;
-            user = new Seller(name, "000-000-0000", 30, password, idSeller);
+            user = new Seller(name, "123456789", 22, password, idSeller);
         }
 
         if (user) {
