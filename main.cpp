@@ -1,57 +1,42 @@
-#include <iostream>
-#include <string>
-using namespace std;
-
-
-
 ///////// importante, el nombre de usuario es Aris,
 ////////
 //////// la contrasena es 123, para ingresar como seller el id es 54321 y como client 12345
 ///////
 
 
+#include <iostream>
+#include <string>
+using namespace std;
+
 class User {
+protected:
+    string Name;
+    string Tel;
+    int Age;
+    string Password;
 
-    protected:
-        string Name;
-        string Tel;
-        int Age;
-        string Password;
-
-    public:
-        User(string _Name, string _Tel, int _Age, string _Password) {
-            Name = _Name;
-            Tel = _Tel;
-            Age = _Age;
-            Password = _Password;
-        }
-
+public:
+    User(string _Name, string _Tel, int _Age, string _Password)
+            : Name(_Name), Tel(_Tel), Age(_Age), Password(_Password) {}
 
     virtual void Login(string name, string password) {
         if (name == Name && password == Password) {
-
             cout << "Login successful!" << endl;
-
         } else {
             cout << "Invalid username or password." << endl;
         }
     }
 
     void Logout() {
-
         cout << Name << " has logged out." << endl;
-
     }
 
     bool ChangePsw(string oldPsw, string newPsw) {
         if (oldPsw == Password) {
-
             Password = newPsw;
             cout << "Password changed successfully!" << endl;
             return true;
-
         } else {
-
             cout << "Incorrect old password!" << endl;
             return false;
         }
@@ -59,15 +44,12 @@ class User {
 };
 
 class Client : public User {
+private:
+    string IdClient;
 
-    private:
-        string IdClient;
-
-    public:
-        Client(string _Name, string _Tel, int _Age, string _Password, string _IdClient) : User(_Name, _Tel, _Age, _Password) {
-            IdClient = _IdClient;
-        }
-
+public:
+    Client(string _Name, string _Tel, int _Age, string _Password, string _IdClient)
+            : User(_Name, _Tel, _Age, _Password), IdClient(_IdClient) {}
 
     void Buy() {
         cout << Name << " is buying." << endl;
@@ -128,12 +110,8 @@ private:
     string IdSeller;
 
 public:
-
-    Seller(string _Name, string _Tel, int _Age, string _Password, string _IdSeller) : User(_Name, _Tel, _Age, _Password) {
-        IdSeller = _IdSeller;
-    }
-
-
+    Seller(string _Name, string _Tel, int _Age, string _Password, string _IdSeller)
+            : User(_Name, _Tel, _Age, _Password), IdSeller(_IdSeller) {}
 
     void Sell() {
         cout << Name << " is selling." << endl;
@@ -198,9 +176,6 @@ int main() {
     cout << "Enter your password: ";
     cin >> password;
 
-
-    User* user = nullptr;
-
     if (name == "Aris" && password == "123") {
         string userType;
         cout << "Enter 'client' or 'seller': ";
@@ -210,22 +185,16 @@ int main() {
             string idClient = "12345";
             cout << "Enter your Client ID: ";
             cin >> idClient;
-            user = new Client(name, "123456789", 22, password, idClient);
+            Client client(name, "123456789", 22, password, idClient);
+            client.Login(name, password);
+            client.ClientOptions();
         } else if (userType == "seller") {
             string idSeller = "54321";
             cout << "Enter your Seller ID: ";
             cin >> idSeller;
-            user = new Seller(name, "123456789", 22, password, idSeller);
-        }
-
-        if (user) {
-            user->Login(name, password);
-            if (Client* client = dynamic_cast<Client*>(user)) {
-                client->ClientOptions();
-            } else if(Seller* seller = dynamic_cast<Seller*>(user)) {
-                seller->SellerOptions();
-            }
-            delete user;
+            Seller seller(name, "123456789", 22, password, idSeller);
+            seller.Login(name, password);
+            seller.SellerOptions();
         }
     } else {
         cout << "Invalid credentials." << endl;
